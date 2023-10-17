@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tip</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <h2>{{ msg }}</h2>
+        <school></school>
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    const school = Vue.extend({
+        // 这个在开发者工具里面显示
+        name: 'school',
+        template: `
+                <div>
+                    <h2>学校名称 {{ name }}</h2>
+                    <h2>学校地址 {{ address }}</h2>
+                </div>
+            `,
+        data() {
+            return {
+                name: '尚硅谷',
+                address: '北京',
+            }
+        }
+    })
+
+    new Vue({
+        el: '#root',
+        data: {
+            msg: 'hello',
+        },
+        components: {
+            school,
+        }
+    })
+</script>
+
+</html>

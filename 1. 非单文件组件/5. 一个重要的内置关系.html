@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一个重要的内置关系</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <school></school>
+        <!-- 只有在这里写了标签 才有 vc 实例对象 -->
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+
+    // 定义一个构造函数
+    // function Demo() {
+    //     this.a = 1;
+    //     this.b = 2;
+    // }
+
+    // // 创建一个 Demo 的实例对象
+    // const d = new Demo()
+
+    // console.log(Demo.prototype);  // 显式原型属性
+
+    // console.log(d.__proto__);  // 隐式原型属性
+    // console.log(Demo.prototype === d.__proto__);  // 这两个都指向构造函数的原型对象
+
+
+    // // 程序员通过显式原型属性操作原型对象，追加一个 x 属性，值为 99
+    // Demo.prototype.x = 99
+
+    // console.log('@', d.__proto__.x);  // 通过 Demo.prototype 写  那么也就可以通过 d.__proto__ 获取到
+    // console.log('@', d.x);
+
+
+    // 定义 school 组件
+    const school = Vue.extend({
+        template: `
+            <div>
+                <h2>学校名称：{{ schoolName }}</h2>
+                <h2>学校地址：{{ address }}</h2>
+                <button @click="showX">点我 x</button>
+            </div>  
+        `,
+
+        data() {
+            return {
+                schoolName: '尚硅谷',
+                address: '北京',
+            }
+        },
+        methods: {
+            showX() {
+                // this 指向实例对象 vc  可以访问到 Vue 原型对象上的 x
+                console.log(this.x);  // 99
+            }
+        },
+    })
+
+    // 创建一个 vm
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            msg: '你好',
+        },
+        components: {
+            school,
+        }
+    })
+
+
+    // school 就是 VueComponent
+    // 一个重要内置关系 VueComponent.prototype.__proto__ === Vue.prototype
+    console.log(school.prototype.__proto__ === Vue.prototype);
+
+    // Vue 原型上加一个属性
+    Vue.prototype.x = 99
+    console.log(vm.x);  // 这两个一样
+    console.log(vm.__proto__.x);  // vm 可以访问到
+</script>
+
+</html>

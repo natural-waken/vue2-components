@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件嵌套</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!-- 可以在这写 也可以在下面 new Vue 里面 template 写 -->
+        <!-- <app></app> -->
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    // 定义 student 组件
+    // student 要嵌套在 school 里面  需要在前面定义
+    // 嵌套所以要将 student 结构放在 school 里面
+    const student = Vue.extend({
+        template: `
+                <div>
+                    <h2>学生名称 {{ name }}</h2>
+                    <h2>学生年龄 {{ age }}</h2>
+                </div>
+            `,
+        data() {
+            return {
+                name: '张三',
+                age: 15,
+            }
+        }
+    })
+
+    // 定义 school 组件
+    const school = Vue.extend({
+        name: 'school',
+        template: `
+                <div>
+                    <h2>学校名称 {{ name }}</h2>
+                    <h2>学校地址 {{ address }}</h2>
+                    <student></student>
+                </div>
+            `,
+        data() {
+            return {
+                name: '尚硅谷',
+                address: '北京',
+            }
+        },
+        // 嵌套 student
+        // 注册组件（局部）
+        components: {
+            student,
+        }
+    })
+
+    // 定义 hello 组件
+    const hello = Vue.extend({
+        template: `
+                <h1>{{msg}}</h1>
+            `,
+        data() {
+            return {
+                msg: '欢迎到尚硅谷学习'
+            }
+        }
+    })
+
+    // 定义 app 组件  用来管理所有组件
+    // 里面可以不用写数据 注册所有组件
+    // 然后在 vm 里面注册 app 就好了
+    const app = Vue.extend({
+        template: `
+        <div>
+            <school></school>
+            <hello></hello>
+        </div>
+        `,
+        components: {
+            // 不用写 student 因为已经在 school 里面注册了
+            school,
+            hello,
+        }
+    })
+
+    // 创建 vm
+    new Vue({
+        template: `
+            <app></app>
+        `,
+        el: '#root',
+        // 注册组件 （局部）
+        components: {
+            app,
+        }
+    })
+</script>
+
+</html>
